@@ -11,11 +11,22 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'stripe-gateway',
+    'DESCRIPTION': 'Simple payment gateway using Stripe',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
 
 # Application definition
 
 LOCAL_APPS = [
     'payment.apps.PaymentConfig',
+    'api.apps.ApiConfig',
 ]
 
 THIRD_PARTY_APPS = [
