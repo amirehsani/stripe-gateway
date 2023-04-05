@@ -1,0 +1,1 @@
+1- configure and move to MySQL
