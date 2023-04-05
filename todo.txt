@@ -1,1 +1,2 @@
-1- configure and move to MySQL
+1. add password to mysql regarding permissions.
+2. modular settings.pyt for the project.
