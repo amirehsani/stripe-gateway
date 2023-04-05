@@ -1,4 +1,6 @@
 from pathlib import Path
+from users.models import BaseUser
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,6 +30,7 @@ LOCAL_APPS = [
     'payment.apps.PaymentConfig',
     'api.apps.ApiConfig',
     'users.apps.UsersConfig',
+    'common.apps.CommonConfig',
 ]
 
 THIRD_PARTY_APPS = [
@@ -108,6 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = BaseUser
 
 LANGUAGE_CODE = 'en-us'
 
