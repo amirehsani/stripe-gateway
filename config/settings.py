@@ -1,8 +1,5 @@
 from pathlib import Path
 
-import users.models
-from users.models import BaseUser
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -113,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = users.BaseUser
+AUTH_USER_MODEL = 'users.BaseUser'
 
 LANGUAGE_CODE = 'en-us'
 
