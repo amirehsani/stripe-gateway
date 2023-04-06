@@ -1,4 +1,6 @@
 from pathlib import Path
+
+import users.models
 from users.models import BaseUser
 
 
@@ -35,7 +37,7 @@ LOCAL_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
-    'drf_spectacular'
+    'drf_spectacular',
 ]
 
 INSTALLED_APPS = [
@@ -111,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = BaseUser
+AUTH_USER_MODEL = users.BaseUser
 
 LANGUAGE_CODE = 'en-us'
 
