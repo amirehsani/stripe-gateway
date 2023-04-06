@@ -1,11 +1,13 @@
 from abc import ABC
 
+from django.core.validators import MinLengthValidator
 from rest_framework import serializers
 from rest_framework.status import HTTP_400_BAD_REQUEST
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 
+from common.validators import *
 from .models import BaseUser
 
 
@@ -13,8 +15,26 @@ class RegisterAPI(APIView):
 
     class InputSerializer(serializers.Serializer, ABC):
         email = serializers.EmailField(max_length=255)
-        password = serializers.CharField(max_length=100)
+        password = serializers.CharField(validators=[
+            number_validator,
+            letter_validator,
+            special_char_validator,
+            MinLengthValidator(limit_value=8),
+        ])
         confirm_password = serializers.CharField(max_length=100)
+
+    def validate_email(self, email):
+        if BaseUser.objects.filter(email=email).exists():
+            raise serializers.ValidationError("Email is already taken")
+        return email
+
+    def validate(self, data):
+        if not data.get("password") or not data.get("confirm_password"):
+            raise serializers.ValidationError("Please fill password and confirm password")
+
+        if data.get("password") != data.get("confirm_password"):
+            raise serializers.ValidationError("confirm password is not equal to password")
+        return data
 
     class OutputSerializer(serializers.Serializer):
         class Meta:
@@ -38,53 +58,3 @@ class RegisterAPI(APIView):
             )
 
         return Response(self.OutputSerializer(query, context={'request': request}).data)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# from django.core.validators import MinLengthValidator
-# from rest_framework import serializers
-# from rest_framework.views import APIView
-#
-# from .models import BaseUser
-# from common.validators import *
-#
-#
-# class RegisterApi(APIView):
-#
-#     class InputRegisterSerializer(serializers.Serializer):
-#         email = serializers.EmailField(max_length=255)
-#         bio = serializers.CharField(max_length=1000, required=False)
-#         password = serializers.CharField(
-#             validators=[
-#                 number_validator, letter_validator, special_char_validator,
-#                 MinLengthValidator(limit_value=10)
-#             ]
-#         )
-#
-#         confirm_password = serializers.CharField(max_length=255)
-#
-#         @staticmethod
-#         def validate_email(email):
-#             if BaseUser.objects.filter(email=email).exists():
-#                 raise serializers.ValidationError("email Already Taken")
-#             return email
-#
-#         def validate(self, data):
-#             if not data.get("password") or not data.get("confirm_password"):
-#                 raise serializers.ValidationError("Please fill password and confirm password")
-#
-#             if data.get("password") != data.get("confirm_password"):
-#                 raise serializers.ValidationError("confirm password is not equal to password")
-#             return data

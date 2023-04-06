@@ -1,0 +1,59 @@
+Index: common/validators.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/common/validators.py b/common/validators.py
+--- a/common/validators.py	
++++ b/common/validators.py	
+@@ -1,0 +1,34 @@
++from django.utils.translation import gettext_lazy as _
++from django.core.exceptions import ValidationError
++
++import re
++
++
++def number_validator(password):
++    regex = re.compile('[0-9]')
++
++    if regex.search(password) == None:
++        raise ValidationError(
++            _("password must include number"),
++            code="password_must_include_number"
++        )
++
++
++def letter_validator(password):
++    regex = re.compile('[a-zA-Z]')
++
++    if regex.search(password) == None:
++        raise ValidationError(
++            _("password must include letter"),
++            code="password_must_include_letter"
++        )
++
++
++def special_char_validator(password):
++    regex = re.compile('[@_!#$%^&*()<>?/\|}{~:]')
++
++    if regex.search(password) == None:
++        raise ValidationError(
++            _("password must include special char"),
++            code="password_must_include_special_char"
++        )
+Index: todo.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>1. add password to mysql regarding permissions.\n2. modular settings.pyt for the project.\n3. categorize urls.py as what AmirBahador said\n4. what's this? https://alokkumar-17171.medium.com/django-error-appregistrynotready-apps-arent-loaded-yet-922d2e74cd\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/todo.txt b/todo.txt
+--- a/todo.txt	
++++ b/todo.txt	
+@@ -2,3 +2,4 @@
+ 2. modular settings.pyt for the project.
+ 3. categorize urls.py as what AmirBahador said
+ 4. what's this? https://alokkumar-17171.medium.com/django-error-appregistrynotready-apps-arent-loaded-yet-922d2e74cd
++5. add JWT token authentication
+\ No newline at end of file

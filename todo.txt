@@ -2,3 +2,4 @@
 2. modular settings.pyt for the project.
 3. categorize urls.py as what AmirBahador said
 4. what's this? https://alokkumar-17171.medium.com/django-error-appregistrynotready-apps-arent-loaded-yet-922d2e74cd
+5. add JWT token authentication
