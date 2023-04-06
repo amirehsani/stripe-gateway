@@ -7,17 +7,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 
-
 from common.validators import *
-from .services import create_user, register
+from .services import register
 from .selectors import get_profile
 from .models import BaseUser, Profile
 
 
 # USER REGISTRATION API -----------------------------
 class RegisterAPI(APIView):
-
-    class InputSerializer(serializers.Serializer, ABC):
+    class InputRegisterSerializer(serializers.Serializer):
         email = serializers.EmailField(max_length=255)
         country = serializers.CharField(max_length=100)
         password = serializers.CharField(validators=[
@@ -28,11 +26,13 @@ class RegisterAPI(APIView):
         ])
         confirm_password = serializers.CharField(max_length=100)
 
+    @staticmethod
     def validate_email(self, email):
         if BaseUser.objects.filter(email=email).exists():
             raise serializers.ValidationError("Email is already taken")
         return email
 
+    @staticmethod
     def validate(self, data):
         if not data.get("password") or not data.get("confirm_password"):
             raise serializers.ValidationError("Please fill password and confirm password")
@@ -41,21 +41,21 @@ class RegisterAPI(APIView):
             raise serializers.ValidationError("confirm password is not equal to password")
         return data
 
-    class OutputSerializer(serializers.Serializer):
+    class OutputRegisterSerializer(serializers.Serializer):
         class Meta:
             model = BaseUser
-            fields = 'email'
+            fields = ('email', 'created_at', 'updated_at')
 
-    @extend_schema(request=InputSerializer, responses=OutputSerializer)
+    @extend_schema(request=InputRegisterSerializer, responses=OutputRegisterSerializer)
     def post(self, request):
-        serializer = self.InputSerializer(data=request.data)
+        serializer = self.InputRegisterSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         try:
-            query = register(
-                email = serializer.validated_data.get('email'),
-                password = serializers.validated_data.get('password'),
-                country = serializers.validated_data.get('country'),
+            user = register(
+                email=serializer.validated_data.get('email'),
+                password=serializer.validated_data.get('password'),
+                country=serializer.validated_data.get('country'),
             )
 
         except Exception as x:
@@ -63,19 +63,19 @@ class RegisterAPI(APIView):
                 f"Database Error {x}", status=HTTP_400_BAD_REQUEST
             )
 
-        return Response(self.OutputSerializer(query, context={'request': request}).data)
+        return Response(self.OutputRegisterSerializer(user, context={'request': request}).data)
 
 
 # USER PROFILE API ------------------------
 class ProfileAPI(APIView):
 
-    class OutputSerializer(serializers.ModelSerializer):
+    class OutputProfileSerializer(serializers.ModelSerializer):
         class Meta:
             model = Profile
-            fields = ('user', 'date_of_birth', 'country')
+            fields = ('user', 'country')
 
-    @extend_schema(responses=OutputSerializer)
+    @extend_schema(responses=OutputProfileSerializer)
     def get(self, request):
         query = get_profile(user=request.user)
-        return Response(self.OutputSerializer(query, context= {'request': request},
-                                              many=True).data)
+        return Response(self.OutputProfileSerializer(query, context={'request': request},
+                                                     many=True).data)

@@ -37,7 +37,6 @@ class BaseUser(BaseModel, AbstractBaseUser, PermissionsMixin):
 class Profile(models.Model):
 
     user = models.OneToOneField(BaseUser, on_delete=models.CASCADE)
-    date_of_birth = models.DateField(verbose_name='Date of Birth')
     country = models.CharField(max_length=155, blank=False, null=False)
 
     def __str__(self):
