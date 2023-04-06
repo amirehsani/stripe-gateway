@@ -7,14 +7,19 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema
 
+
 from common.validators import *
-from .models import BaseUser
+from .services import create_user, register
+from .selectors import get_profile
+from .models import BaseUser, Profile
 
 
+# USER REGISTRATION API -----------------------------
 class RegisterAPI(APIView):
 
     class InputSerializer(serializers.Serializer, ABC):
         email = serializers.EmailField(max_length=255)
+        country = serializers.CharField(max_length=100)
         password = serializers.CharField(validators=[
             number_validator,
             letter_validator,
@@ -47,9 +52,10 @@ class RegisterAPI(APIView):
         serializer.is_valid(raise_exception=True)
 
         try:
-            query = create_user(
+            query = register(
                 email = serializer.validated_data.get('email'),
-                password = serializers.validated_data.get('password')
+                password = serializers.validated_data.get('password'),
+                country = serializers.validated_data.get('country'),
             )
 
         except Exception as x:
@@ -58,3 +64,18 @@ class RegisterAPI(APIView):
             )
 
         return Response(self.OutputSerializer(query, context={'request': request}).data)
+
+
+# USER PROFILE API ------------------------
+class ProfileAPI(APIView):
+
+    class OutputSerializer(serializers.ModelSerializer):
+        class Meta:
+            model = Profile
+            fields = ('user', 'date_of_birth', 'country')
+
+    @extend_schema(responses=OutputSerializer)
+    def get(self, request):
+        query = get_profile(user=request.user)
+        return Response(self.OutputSerializer(query, context= {'request': request},
+                                              many=True).data)
