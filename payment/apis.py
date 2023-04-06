@@ -6,8 +6,25 @@ from drf_spectacular.utils import extend_schema
 from .models import *
 
 
-@extend_schema()
+@extend_schema(
+    description='Process a payment using Stripe',
+    request={
+        'type': 'object',
+        'properties': {
+            'amount': {'type': 'string', 'format': 'decimal'},
+            'currency': {'type': 'string'},
+            'description': {'type': 'string'},
+            'token': {'type': 'string'},
+        },
+        'required': ['amount', 'currency', 'description', 'token'],
+    },
+    responses={
+        HTTP_200_OK: {'description': 'Payment processed successfully'},
+        HTTP_400_BAD_REQUEST: {'description': 'Payment declined'},
+    },
+)
 class PaymentAPIView(APIView):
+
     def post(self, request, *args, **kwargs):
         payment = Payment(
             amount=request.data.get('amount'),
