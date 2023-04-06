@@ -1,9 +1,10 @@
+TASKS:
 * Add JWT authentication
 * Add some data to the database
 * Write some tests.
-*
+* https://justdjango.com/blog/django-stripe-payments-tutorial
 
-
+BONUS:
 1. add password to mysql regarding permissions.
 2. modulated settings.py for the project.
 3. categorize urls.py as what AmirBahador said
@@ -11,3 +12,7 @@
 5. add JWT token authentication
 6. set up admin panel
 7. postman collection
+
+RESEARCH:
+1. What is CORS?
+2.
