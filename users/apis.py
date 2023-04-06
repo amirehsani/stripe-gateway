@@ -26,13 +26,11 @@ class RegisterAPI(APIView):
         ])
         confirm_password = serializers.CharField(max_length=100)
 
-    @staticmethod
     def validate_email(self, email):
         if BaseUser.objects.filter(email=email).exists():
             raise serializers.ValidationError("Email is already taken")
         return email
 
-    @staticmethod
     def validate(self, data):
         if not data.get("password") or not data.get("confirm_password"):
             raise serializers.ValidationError("Please fill password and confirm password")
@@ -77,5 +75,4 @@ class ProfileAPI(APIView):
     @extend_schema(responses=OutputProfileSerializer)
     def get(self, request):
         query = get_profile(user=request.user)
-        return Response(self.OutputProfileSerializer(query, context={'request': request},
-                                                     many=True).data)
+        return Response(self.OutputProfileSerializer(query, context={'request': request}).data)
