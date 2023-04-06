@@ -1,14 +1,14 @@
 from pathlib import Path
-
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+%^gvv4uh@%5gh--1mh$3q^6f3(bok45rv=yru1@nl9y8d6yn+'
+# secret key is stored in .env file
+SECRET_KEY = config('SECRET_KEY')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# debug is also stored in .env file
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = []
 

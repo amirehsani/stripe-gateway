@@ -1,0 +1,12 @@
+We're using Stripe checkout in order to be able to
+
+Stripe is a payment processing tool that connects to the bank and does the payment process.
+In real-world businesses, using a third-party checkout page is recommended beside Stripe.
+It allows businesses to process credit and debit card.
+
+
+Stripe is a full-stack payment processor, meaning it serves as both a payment processor and a payment gateway.
+To process online transactions you need both.
+
+In order to user Stripe REST API, you'll need two pair of public/private keys, one test and one live.
+
