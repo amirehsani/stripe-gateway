@@ -1,5 +1,4 @@
 from pathlib import Path
-from users.models import BaseUser
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -35,7 +34,7 @@ LOCAL_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
-    'drf_spectacular'
+    'drf_spectacular',
 ]
 
 INSTALLED_APPS = [
@@ -111,7 +110,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = BaseUser
+AUTH_USER_MODEL = 'users.BaseUser'
 
 LANGUAGE_CODE = 'en-us'
 
