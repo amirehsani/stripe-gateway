@@ -10,6 +10,9 @@ SECRET_KEY = config('SECRET_KEY')
 # debug is also stored in .env file
 DEBUG = config('DEBUG', default=False, cast=bool)
 
+# Stripe private key
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+
 ALLOWED_HOSTS = []
 
 REST_FRAMEWORK = {
