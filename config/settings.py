@@ -30,7 +30,6 @@ SPECTACULAR_SETTINGS = {
 
 LOCAL_APPS = [
     'payment.apps.PaymentConfig',
-    'api.apps.ApiConfig',
     'users.apps.UsersConfig',
     'common.apps.CommonConfig',
     'auth.apps.AuthConfig',
